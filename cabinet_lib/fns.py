@@ -1,6 +1,7 @@
 import json
 import pdb
 import requests
+import base64
 
 import psycopg2
 import yaml
@@ -19,7 +20,7 @@ def encode_blob(file_path:str) ->str:
     blob_b64s = str(blob_base64)
     return blob_b64s
 
-    
+
 def make_url(blob_type:str, parameters:dict) -> str:
     if not blob_type in parameters.keys():
         parameters['blob_type'] = blob_type
