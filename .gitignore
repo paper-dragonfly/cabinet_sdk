@@ -1,0 +1,6 @@
+.venv_cabinet/*
+*.pyc
+__pycache__/*
+tests/*
+
+
