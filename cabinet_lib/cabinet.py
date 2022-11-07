@@ -46,7 +46,10 @@ def feilds(blob_type:str)-> dict:
     """
     Returns a dict where keys are the metadata fields for specified blob_type. Values are None.  
     """
-    fields:list = requests.get(ROOT_URL+f'/blob/feilds?blob_type={blob_type}').json()
+    api_resp = requests.get(ROOT_URL+f'/blob/feilds?blob_type={blob_type}').json()
+    if api_resp['status_code'] != 200:
+        raise Exception(api_resp['error_message'])
+    fields:list = api_resp['body']['fields']
     fields_dict = dict.fromkeys(fields)
     return fields_dict
 
@@ -56,6 +59,17 @@ def blob_types():
     Lists all blob_types stored in Cabinet and their metadata fields
     """
     pass 
+
+
+def retrieve(blob_type: str, entry_id: int) -> bytes:
+    """Returns blob in bytes"""
+    api_resp = requests.get(ROOT_URL+f'/blob/retrieve?blob_type={blob_type}&entry_id={entry_id}')
+    if api_resp['status_code'] != 200:
+        raise Exception(api_resp['error_message'])
+    blob_b64s = api_resp['body']['blob']
+    blob_bytes = f.bytify(blob_b64s)
+    return blob_bytes 
+    
 
 
 

@@ -17,8 +17,14 @@ def encode_blob(file_path:str) ->str:
     with open(file_path, mode='rb') as f:
         blob_bytes = f.read()
     blob_base64 = base64.b64encode(blob_bytes)
-    blob_b64s = str(blob_base64)
+    blob_b64s = blob_base64.decode('ascii')
     return blob_b64s
+
+
+def bytify(base64_str: str) ->bytes: 
+    blob_b64_bytes = base64_str.encode('ascii')
+    blob_bytes = base64.b64decode(blob_b64_bytes) 
+    return blob_bytes 
 
 
 def make_url(blob_type:str, parameters:dict) -> str:
