@@ -1,11 +1,16 @@
 import json
 import pdb
-import base64
 import requests
+import os
 
-from cabinet_lib.constants import ROOT_URL
-import cabinet_lib.fns as f
+import cabinet_sdk.fns as f
 
+ENV = os.getenv('ENV')
+ROOT_URL = f.get_root_url(ENV)
+
+def welcome(name):
+    """Simple fn to test library is working"""
+    return print(f'Welcome {name} to Cabinet')
 
 def upload(metadata:dict, file_path:str) -> dict:
     """

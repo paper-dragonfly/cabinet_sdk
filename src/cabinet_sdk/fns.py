@@ -1,13 +1,13 @@
-import json
 import pdb
-import requests
+import json
 import base64
+import os
 
-import psycopg2
 import yaml
 
-from cabinet_lib.constants import ROOT_URL
+from cabinet_sdk.constants import ROOT_URL
 
+ENV = os.getenv('ENV')
 
 
 def encode_blob(file_path:str) ->str:
@@ -35,6 +35,13 @@ def make_url(blob_type:str, parameters:dict) -> str:
         url += f'{key}={parameters[key]}&'
     url = url[0:-1] 
     return url
+
+
+def get_root_url(env:str=ENV, config_file:str='config/config.yaml')->str:
+    with open(f'{config_file}', 'r') as f:
+        config_dict = yaml.safe_load(f)
+    root_url = config_dict['cabinet'][env]
+    return root_url
 
 
 
