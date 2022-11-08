@@ -5,9 +5,15 @@ import os
 
 import yaml
 
-from cabinet_sdk.constants import ROOT_URL
 
 ENV = os.getenv('ENV')
+
+
+def get_root_url(env:str=ENV, config_file:str='config/config.yaml')->str:
+    with open(f'{config_file}', 'r') as f:
+        config_dict = yaml.safe_load(f)
+    root_url = config_dict['cabinet'][env]
+    return root_url
 
 
 def encode_blob(file_path:str) ->str:
@@ -37,11 +43,6 @@ def make_url(blob_type:str, parameters:dict) -> str:
     return url
 
 
-def get_root_url(env:str=ENV, config_file:str='config/config.yaml')->str:
-    with open(f'{config_file}', 'r') as f:
-        config_dict = yaml.safe_load(f)
-    root_url = config_dict['cabinet'][env]
-    return root_url
 
 
 

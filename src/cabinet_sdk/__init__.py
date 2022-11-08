@@ -1,1 +1,1 @@
-from cabinet import welcome, upload, search, update,feilds,retrieve
+from cabinet_sdk.cabinet import welcome, fields, search, update, upload, retrieve

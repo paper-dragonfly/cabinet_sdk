@@ -47,11 +47,11 @@ def update(blob_type:str, entry_id:int, update_data:dict):
 
 # OTHER 
 
-def feilds(blob_type:str)-> dict: 
+def fields(blob_type:str)-> dict: 
     """
     Returns a dict where keys are the metadata fields for specified blob_type. Values are None.  
     """
-    api_resp = requests.get(ROOT_URL+f'/blob/feilds?blob_type={blob_type}').json()
+    api_resp = requests.get(ROOT_URL+f'/blob/fields?blob_type={blob_type}').json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
     fields:list = api_resp['body']['fields']
