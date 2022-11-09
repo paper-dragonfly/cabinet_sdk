@@ -5,9 +5,8 @@ import os
 
 import cabinet_sdk.fns as f
 
-ENV = os.getenv('ENV')
-ROOT_URL = f.get_root_url(ENV)
-
+ROOT_URL = f.get_root_url( )
+ 
 def welcome(name):
     """Simple fn to test library is working"""
     return print(f'Welcome {name} to Cabinet')
@@ -24,11 +23,11 @@ def upload(metadata:dict, file_path:str) -> dict:
         raise Exception(api_resp['error_message'])
     return api_resp['body']
 
-def search(blob_type:str, parameters:dict) ->dict:
+def search(blob_type:str, search_parameters:dict) ->dict:
     """
     Returns metadata for all entries matching submitted search parameters
     """
-    url = f.make_url(blob_type, parameters)
+    url = f.make_url(blob_type, search_parameters)
     api_resp = requests.get(ROOT_URL+url).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])

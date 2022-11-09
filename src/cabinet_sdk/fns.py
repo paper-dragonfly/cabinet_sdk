@@ -6,13 +6,13 @@ import os
 import yaml
 
 
-ENV = os.getenv('ENV')
-
-
-def get_root_url(env:str=ENV, config_file:str='config/config.yaml')->str:
-    with open(f'{config_file}', 'r') as f:
+def get_root_url()->str:
+    ENV = 'dev_local'
+    if os.getenv('ENV'):
+        ENV = os.getenv('ENV')
+    with open('config/config.yaml', 'r') as f:
         config_dict = yaml.safe_load(f)
-    root_url = config_dict['cabinet'][env]
+    root_url = config_dict['cabinet'][ENV]
     return root_url
 
 
