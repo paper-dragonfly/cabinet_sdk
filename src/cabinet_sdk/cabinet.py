@@ -13,7 +13,7 @@ def welcome(name):
 
 def upload(metadata:dict, file_path:str) -> dict:
     """
-    Add a new entry to the Cabinet System. Entry includes a blob in base64_str form and a dict of associated metadata
+    Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Entry includes a blob in base64_str form and a dict of associated metadata. 
     """
     # NOTE: may need to move inside a nother fn so post and post_args aren't accessible to user
     blob = f.encode_blob(file_path)
@@ -50,10 +50,10 @@ def fields(blob_type:str)-> dict:
     """
     Returns a dict where keys are the metadata fields for specified blob_type. Values are None.  
     """
-    api_resp = requests.get(ROOT_URL+f'/blob/fields?blob_type={blob_type}').json()
+    api_resp = requests.get(ROOT_URL+f'/fields?blob_type={blob_type}').json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
-    fields:list = api_resp['body']['fields']
+    fields:list = api_resp['body'][blob_type]
     fields_dict = dict.fromkeys(fields)
     return fields_dict
 
@@ -62,7 +62,10 @@ def blob_types():
     """
     Lists all blob_types stored in Cabinet and their metadata fields
     """
-    pass 
+    api_resp = requests.get(ROOT_URL+'/fields?blob_type=return_all_blob_types').json()
+    if api_resp['status_code'] != 200:
+        raise Exception(api_resp['error_message'])
+    return api_resp['body']
 
 
 def retrieve(blob_type: str, entry_id: int) -> bytes:
