@@ -13,7 +13,7 @@ def welcome(name):
 
 def upload(metadata:dict, file_path:str) -> dict:
     """
-    Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Entry includes a blob in base64_str form and a dict of associated metadata. 
+    Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Entry includes a blob in base64_str form and a dict of associated metadata. RETURNS: entry_id
     """
     # NOTE: may need to move inside a nother fn so post and post_args aren't accessible to user
     blob = f.encode_blob(file_path)
@@ -23,11 +23,11 @@ def upload(metadata:dict, file_path:str) -> dict:
         raise Exception(api_resp['error_message'])
     return api_resp['body']
 
-def search(blob_type:str, search_parameters:dict) ->dict:
+def search(blob_type:str, metadata_search_parameters:dict={}) ->dict:
     """
-    Returns metadata for all entries matching submitted search parameters
+    Search Cabinet for entries within your specified blob_type that have metadata matching submitted metadata_search_parameters. RETURNS metadata for all entries matching submitted search parameters. If no search parameters are entered, all entries in this blob_type will be returned.
     """
-    url = f.make_url(blob_type, search_parameters)
+    url = f.make_url(blob_type, metadata_search_parameters)
     api_resp = requests.get(ROOT_URL+url).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
@@ -70,7 +70,7 @@ def blob_types():
 
 def retrieve(blob_type: str, entry_id: int) -> bytes:
     """Returns blob in bytes"""
-    api_resp = requests.get(ROOT_URL+f'/blob/retrieve?blob_type={blob_type}&entry_id={entry_id}')
+    api_resp = requests.get(ROOT_URL+f'/blob/{blob_type}/{entry_id}')
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
     blob_b64s = api_resp['body']['blob']

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cabinet_sdk"
-version = "0.0.4"
+version = "0.0.6"
 authors = [
   { name="Kathleen Noble", email="kitkat_kathleen@yahoo.com" },
 ]
@@ -16,7 +16,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = ["requests", "pyyaml"]
+dependencies = ["requests", "PyYAML"]
 
 [project.urls]
 "Homepage" = "https://github.com/paper-dragonfly/cabinet_sdk"
