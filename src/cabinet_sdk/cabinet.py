@@ -24,7 +24,7 @@ def blob_types():
 
 def fields(blob_type:str)-> list: 
     """
-    Returns a list of metadata fields for specified blob_type.  
+    Returns a list of metadata fields for specified blob_type  
     """
     api_resp = requests.get(ROOT_URL+f'/fields?blob_type={blob_type}').json()
     if api_resp['status_code'] != 200:
@@ -67,15 +67,9 @@ def update(blob_type:str, entry_id:int, update_data:dict):
 
 # OTHER 
 
-
-
-
-
-
-
 def retrieve(blob_type: str, entry_id: int) -> bytes:
     """Returns blob in bytes"""
-    api_resp = requests.get(ROOT_URL+f'/blob/{blob_type}/{entry_id}')
+    api_resp = requests.get(ROOT_URL+f'/blob/{blob_type}/{entry_id}').json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
     blob_b64s = api_resp['body']['blob']

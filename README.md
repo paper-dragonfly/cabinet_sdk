@@ -2,9 +2,9 @@
 Python library that allows users to access the Cabinet blob-storage system 
 
 ## Description 
-Cabinet is a flexible blob-stroge system that stores blobs and thier associated metadata. It allows users to easily save and search for blobs based on their metadata values rather than file paths. The cabinet_sdk communicates with the cabinet_API which in turn interacts with the Cabinet postgreSQL database. 
+Cabinet is a flexible blob-storage system that stores blobs and their associated metadata. It allows users to easily save and search for blobs based on their metadata values rather than file paths. The cabinet_sdk communicates with the cabinet_API which in turn interacts with the Cabinet postgreSQL database. 
 
-Within Cabinet, entries are organized by blob_type. Each blob_type has it's own metadata schema. For example your Cabinet might have a 'cat_thumbnails' blob_type with metadata fields [entry_id, blob_type, cat_color, cat_breed, photo_size, photo_source'] or a 'student_essays' blob_type with metadata fields [entry_id, blob_type, student_name, student_DOB, subject, grade]
+Within Cabinet, entries are organized by blob_type. Each blob_type has its own metadata schema. For example your Cabinet might have a 'cat_thumbnails' blob_type with metadata fields [entry_id, blob_type, cat_color, cat_breed, photo_size, photo_source'] or a 'student_essays' blob_type with metadata fields [entry_id, blob_type, student_name, student_DOB, subject, grade]
 
 
 ## Installation 
@@ -21,7 +21,7 @@ must create config file (see configuration instructions below)
 * fields(blob_type): Return a list of metadata fields for specified blob_type
 * upload(metadata, file_path): Add a blob and its associated metadata to Cabinet 
 * search(blob_type, metadata_search_parameters): search for all metadata entries of specified blob_type that match the metadata search parameters 
-* update(blob_type, entry_id, update_dict): Creates a soft update of the metadata associated with a stored blob. entry_id is a metadata field for all blob types. In this function, entry_id refers to a previous metadata entry associated with the blob of interest. IN other workds, it is the id for the metadata entry you wish to update.
+* update(blob_type, entry_id, update_dict): Creates a soft update of the metadata associated with a stored blob. entry_id is a metadata field for all blob types. In this function, entry_id refers to a previous metadata entry associated with the blob of interest. I other words, it is the id for the metadata entry you wish to update.
 * retrieve(blob_type, entry_id): returns blob in bytes. User is responsible for decoding bytes. entry_id is a metadata field and is the unique identifier of metadata entries. Use and entry_id that references the metadata entry associated with the blob you want to retrieve. 
 
 ## Limitations 
