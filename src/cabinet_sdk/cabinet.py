@@ -55,11 +55,11 @@ def search(blob_type:str, metadata_search_parameters:dict={}) ->dict:
     return api_resp['body']
       
 
-def update(blob_type:str, entry_id:int, update_data:dict):
+def update(blob_type:str, entry_id:int, update_data:dict) -> dict:
     """
     Creates a soft update of the metadata associated with a stored blob
     """
-    data = {'blob_type':blob_type, 'entry_id':entry_id, 'update_data':update_data}
+    data = {'blob_type':blob_type, 'current_entry_id':entry_id, 'update_data':update_data}
     api_resp = requests.post(ROOT_URL+'/blob/update', json=data).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
