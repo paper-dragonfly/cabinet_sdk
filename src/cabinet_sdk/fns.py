@@ -1,7 +1,9 @@
 import pdb
 import json
 import base64
+from typing import List
 import os
+from hashlib import sha256
 
 import yaml
 
@@ -22,9 +24,17 @@ def encode_blob(file_path:str) ->str:
     """
     with open(file_path, mode='rb') as f:
         blob_bytes = f.read()
-    blob_base64 = base64.b64encode(blob_bytes)
-    blob_b64s = blob_base64.decode('ascii')
-    return blob_b64s
+    blob_hash = sha256(blob_bytes).hexdigest()
+    return blob_hash
+
+def save_blob(file_path: str, paths:List[str]) -> bool:
+    try:
+        # save file to cabinet locations
+        for path in paths:
+            os.popen(f"copy {file_path} {path}")
+    except Exception:
+        raise Exception('Problem saving blob')
+    return True 
 
 
 def bytify(base64_str: str) ->bytes: 

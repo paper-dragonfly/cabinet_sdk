@@ -34,15 +34,24 @@ def fields(blob_type:str)-> list:
 
 def upload(metadata:dict, file_path:str) -> dict:
     """
-    Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Entry includes a blob in base64_str form and a dict of associated metadata. RETURNS: entry_id
+    Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Do not include blob_hash in metadata, it will be calculated automatically. RETURNS: entry_id
     """
     # NOTE: may need to move inside a nother fn so post and post_args aren't accessible to user
-    blob = f.encode_blob(file_path)
-    data = {'metadata':metadata, 'blob_b64s': blob}
+    blob_hash = f.encode_blob(file_path)
+    metadata['blob_hash'] = blob_hash 
+    data = {'metadata':metadata}
     api_resp = requests.post(ROOT_URL+'/blob', json=data).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
-    return api_resp['body']
+    entry_id = api_resp['body']['entry_id']
+    f.save_blob(file_path, api_resp['body']['paths']) 
+    # update save status in cabinet db
+    api_resp = requests.put(ROOT_URL+'/blob', json={'paths':api_resp['body']['paths']}).json()
+    if api_resp != 200:
+        raise Exception(api_resp['error_message'])
+    return entry_id 
+    
+        
 
 def search(blob_type:str, metadata_search_parameters:dict={}) ->dict:
     """
