@@ -51,7 +51,6 @@ def upload(metadata:dict, file_path:str) -> dict:
         raise Exception(api_resp['error_message'])
     return entry_id 
     
-        
 
 def search(blob_type:str, metadata_search_parameters:dict={}) ->dict:
     """
@@ -76,14 +75,13 @@ def update(blob_type:str, entry_id:int, update_data:dict) -> dict:
 
 # OTHER 
 
-def retrieve(blob_type: str, entry_id: int) -> bytes:
-    """Returns blob in bytes"""
+def retrieve(blob_type: str, entry_id: int) -> list:
+    """Returns url/file_paths to where blob is saved"""
     api_resp = requests.get(ROOT_URL+f'/blob/{blob_type}/{entry_id}').json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
-    blob_b64s = api_resp['body']['blob']
-    blob_bytes = f.bytify(blob_b64s)
-    return blob_bytes 
+    return api_resp['body']['paths']
+    
     
 
 
