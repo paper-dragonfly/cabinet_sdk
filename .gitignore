@@ -6,3 +6,5 @@ sandbox.py
 dist/*
 config/*
 *.egg-info
+.venv_cabsdk/* 
+blobs/*

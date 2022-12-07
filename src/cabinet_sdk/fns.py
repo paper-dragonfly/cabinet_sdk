@@ -1,8 +1,8 @@
 import pdb
 import json
-import base64
 from typing import List
 import os
+from shutil import copyfile 
 from hashlib import sha256
 
 import yaml
@@ -27,14 +27,16 @@ def encode_blob(file_path:str) ->str:
     blob_hash = sha256(blob_bytes).hexdigest()
     return blob_hash
 
-def save_blob(file_path: str, paths:List[str]) -> bool:
+def save_blob(file_path: str, paths) -> bool:
     try:
         # save file to cabinet locations
         for path in paths:
-            os.popen(f"copy {file_path} {path}")
+            copyfile(file_path, path)
+    except IOError as e:
+        raise Exception('unable to copy file %s' % e)
     except Exception:
         raise Exception('Problem saving blob')
-    return True 
+    return True
 
 
 def bytify(base64_str: str) ->bytes: 
