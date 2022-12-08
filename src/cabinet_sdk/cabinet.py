@@ -32,23 +32,27 @@ def fields(blob_type:str)-> list:
     return api_resp['body'][blob_type]
     
 
-def upload(metadata:dict, file_path:str) -> dict:
+def upload(metadata:dict, file_path:str, hosts: list) -> dict:
     """
     Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Do not include blob_hash in metadata, it will be calculated automatically. RETURNS: entry_id
     """
-    # NOTE: may need to move inside a nother fn so post and post_args aren't accessible to user
+    # NOTE: may need to move inside another fn so post and post_args aren't accessible to user
+    # generate paths and save blob
     blob_hash = f.encode_blob(file_path)
     metadata['blob_hash'] = blob_hash 
-    data = {'metadata':metadata}
-    api_resp = requests.post(ROOT_URL+'/blob', json=data).json()
+    blob_type = metadata['blob_type']
+    blob_info = {'blob_type':blob_type, 'blob_hash':blob_hash, 'save_hosts':hosts}
+    endpoint_url = f.make_url('/paths',blob_type, blob_info)
+    api_resp = requests.get(ROOT_URL+endpoint_url).json()
+    if api_resp['status_code'] != 200:
+        raise Exception(api_resp['error_message'])
+    paths = api_resp['body']['paths']
+    f.save_blob(file_path, api_resp['body']['paths']) 
+    # save metadata + save_paths to cabinet db
+    api_resp = requests.post(ROOT_URL+'/blob', json={'metadata':metadata, 'paths':paths}).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
     entry_id = api_resp['body']['entry_id']
-    f.save_blob(file_path, api_resp['body']['paths']) 
-    # update save status in cabinet db
-    api_resp = requests.put(ROOT_URL+'/blob', json={'paths':api_resp['body']['paths']}).json()
-    if api_resp != 200:
-        raise Exception(api_resp['error_message'])
     return entry_id 
     
 
@@ -56,7 +60,7 @@ def search(blob_type:str, metadata_search_parameters:dict={}) ->dict:
     """
     Search Cabinet for entries within your specified blob_type that have metadata matching submitted metadata_search_parameters. RETURNS metadata for all entries matching submitted search parameters. If no search parameters are entered, all entries in this blob_type will be returned.
     """
-    url = f.make_url(blob_type, metadata_search_parameters)
+    url = f.make_url('blob/',blob_type, metadata_search_parameters)
     api_resp = requests.get(ROOT_URL+url).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
