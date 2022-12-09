@@ -22,9 +22,9 @@ def blob_types():
     return api_resp['body']
 
 
-def fields(blob_type:str)-> list: 
+def schema(blob_type:str)-> list: 
     """
-    Returns a list of metadata fields for specified blob_type  
+    Returns a list of metadata schema for specified blob_type  
     """
     api_resp = requests.get(ROOT_URL+f'/fields?blob_type={blob_type}').json()
     if api_resp['status_code'] != 200:
@@ -36,6 +36,7 @@ def get_hosts():
     """Returns possible hosts where blob can be stored"""
     return requests.get(ROOT_URL+'/hosts').json()['body']['hosts']
     
+
 def upload(metadata:dict, file_path:str, hosts: list) -> dict:
     """
     Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Do not include blob_hash in metadata, it will be calculated automatically. RETURNS: entry_id
@@ -53,6 +54,7 @@ def upload(metadata:dict, file_path:str, hosts: list) -> dict:
     paths = api_resp['body']['paths']
     f.save_blob(file_path, api_resp['body']['paths']) 
     # save metadata + save_paths to cabinet db
+    # Q: should I save and post to each host one at a time so that if one of the saves fails the others are still recorded? 
     api_resp = requests.post(ROOT_URL+'/blob', json={'metadata':metadata, 'paths':paths}).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
