@@ -45,9 +45,8 @@ def upload(metadata:dict, file_path:str, hosts: list) -> dict:
     # generate paths and save blob
     blob_hash = f.encode_blob(file_path)
     metadata['blob_hash'] = blob_hash 
-    blob_type = metadata['blob_type']
-    blob_info = {'blob_type':blob_type, 'blob_hash':blob_hash, 'save_hosts':hosts}
-    endpoint_url = f.make_url('/paths',blob_type, blob_info)
+    blob_info = {'metadata':metadata, 'storage_providers':hosts}
+    endpoint_url = f.make_url('/storage_locations', blob_info)
     api_resp = requests.get(ROOT_URL+endpoint_url).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
