@@ -37,28 +37,29 @@ def get_hosts():
     return requests.get(ROOT_URL+'/hosts').json()['body']['hosts']
     
 
-def upload(metadata:dict, file_path:str, hosts: list) -> dict:
+def upload(metadata:dict, file_path:str, storage_environments: list) -> dict:
     """
-    Add a new entry to the Cabinet System. Provide as arguments the metadata and file path to your blob. Do not include blob_hash in metadata, it will be calculated automatically. RETURNS: entry_id
+    Add a new entry to the Cabinet System. Provide as arguments the blob metadata and file path as well as the environments you want the blob to be saved into (e.g. 'testing' or 'production'). Do not include blob_hash in metadata, it will be calculated automatically. RETURNS: entry_id
     """
     # NOTE: may need to move inside another fn so post and post_args aren't accessible to user
     # generate paths and save blob
     blob_hash = f.encode_blob(file_path)
     metadata['blob_hash'] = blob_hash 
-    blob_info = {'metadata':metadata, 'storage_providers':hosts}
+    blob_info = {'metadata':metadata, 'storage_envs':storage_environments}
     endpoint_url = f.make_url('/storage_locations', blob_info)
     api_resp = requests.get(ROOT_URL+endpoint_url).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
     paths = api_resp['body']['paths']
-    f.save_blob(file_path, api_resp['body']['paths']) 
+    failed_saves = f.save_blob(file_path, paths) 
+    if failed_saves:
+        paths = paths.difference(failed_saves) # only successful saves 
     # save metadata + save_paths to cabinet db
-    # Q: should I save and post to each host one at a time so that if one of the saves fails the others are still recorded? 
     api_resp = requests.post(ROOT_URL+'/blob', json={'metadata':metadata, 'paths':paths}).json()
     if api_resp['status_code'] != 200:
         raise Exception(api_resp['error_message'])
     entry_id = api_resp['body']['entry_id']
-    return entry_id 
+    return {'entry_id':entry_id, 'failed_saves':failed_saves} 
     
 
 def search(blob_type:str, metadata_search_parameters:dict={}) ->dict:

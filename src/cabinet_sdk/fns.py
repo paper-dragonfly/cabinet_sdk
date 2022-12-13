@@ -42,20 +42,19 @@ def upload_blob_googlecloud(source_file_name: str, path: str):
     blob.upload_from_filename(source_file_name)
     return True 
 
-def save_blob(file_path: str, paths: list) -> bool:
-    try:
+def save_blob(current_path: str, destination_paths: set) -> bool:
+    failed_saves = set()
+    for path in destination_paths:
         # save file to cabinet locations
-        for path in paths:
+        try:
             # if google cloud location:
             if re.search("^gs://",path):
-                upload_blob_googlecloud(file_path, path)
+                upload_blob_googlecloud(current_path, path)
             else: 
-                copyfile(file_path, path)
-    except IOError as e:
-        raise Exception('unable to copy file %s' % e)
-    except Exception:
-        raise Exception('Problem saving blob')
-    return True
+                copyfile(current_path, path)
+        except Exception:
+            failed_saves.add(path)
+    return failed_saves
 
 
 def bytify(base64_str: str) ->bytes: 
