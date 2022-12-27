@@ -8,5 +8,9 @@ sandbox.py
 *.pyc
 __pycache__/*
 tests/*
-
-
+sandbox.py
+dist/*
+config/*
+*.egg-info
+.venv_cabsdk/* 
+blobs/*
