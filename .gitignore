@@ -1,4 +1,10 @@
 .venv_cabinet/*
+.venv_cabsdk/*
+blobs/*
+config/config.yaml
+dist/*
+*.egg-info
+sandbox.py
 *.pyc
 __pycache__/*
 tests/*
