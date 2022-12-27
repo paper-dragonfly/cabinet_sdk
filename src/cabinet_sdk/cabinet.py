@@ -53,7 +53,11 @@ def upload(metadata: dict, file_path: str, storage_environments: list) -> dict:
     paths = api_resp["body"]["paths"]
     failed_saves = f.save_blob(file_path, paths)
     if failed_saves:
-        paths = paths.difference(failed_saves)  # only successful saves
+        paths = list(set(paths).difference(failed_saves))  # only successful saves
+    else:  # all saves successful
+        failed_saves = None
+    if not paths:  # blob did not successfully save anywhere
+        return {"entry_id": None, "failed_saves": failed_saves}
     # save metadata + save_paths to cabinet db
     api_resp = requests.post(
         ROOT_URL + "/blob",
