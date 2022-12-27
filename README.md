@@ -18,10 +18,12 @@ must create config file (see configuration instructions below)
 ## What you can do - functions in cabinet_sdk
 * welcome(name): a simple function that confirms the library is working
 * blob_types(): Get a list of all blob_types in your Cabinet 
-* fields(blob_type): Return a list of metadata fields for specified blob_type
+* schema(blob_type): Return a list of metadata fields for specified blob_type
+* get_store_envs(blob_type): Returns possible hosts where blob can be stored
 * upload(metadata, file_path): Add a blob and its associated metadata to Cabinet 
 * search(blob_type, metadata_search_parameters): search for all metadata entries of specified blob_type that match the metadata search parameters 
-* update(blob_type, entry_id, update_dict): Creates a soft update of the metadata associated with a stored blob. entry_id is a metadata field for all blob types. In this function, entry_id refers to a previous metadata entry associated with the blob of interest. I other words, it is the id for the metadata entry you wish to update.
+* update(blob_type, entry_id, update_dict): Creates a soft update of the metadata associated with a stored blob. 
+    * entry_id is a metadata field for all blob types. In this function, entry_id refers to an existing metadata entry associated with the blob of interest that you wish to update.
 * retrieve(blob_type, entry_id): returns blob in bytes. User is responsible for decoding bytes. entry_id is a metadata field and is the unique identifier of metadata entries. Use and entry_id that references the metadata entry associated with the blob you want to retrieve. 
 
 ## Limitations 
