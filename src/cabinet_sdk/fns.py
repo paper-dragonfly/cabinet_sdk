@@ -61,8 +61,7 @@ def make_url(endpoint: str, blob_type: str, parameters: dict) -> str:
     if not blob_type in parameters.keys():
         parameters["blob_type"] = blob_type
     url = endpoint + "?"
-    url += "&".join(parameters)
-    # for key in parameters:
-    #     url += f"{key}={parameters[key]}&"
-    # url = url[0:-1]
+    for key in parameters:
+        url += f"{key}={parameters[key]}&"
+    url = url[0:-1]
     return url

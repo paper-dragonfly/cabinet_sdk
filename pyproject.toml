@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cabinet_sdk"
-version = "0.1.0"
+version = "0.1.2"
 authors = [
   { name="Kathleen Noble", email="kitkat_kathleen@yahoo.com" },
 ]
