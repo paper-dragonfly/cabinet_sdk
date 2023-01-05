@@ -18,7 +18,7 @@ def get_root_url() -> str:
     return root_url
 
 
-def encode_blob(file_path: str) -> str:
+def generate_blob_hash(file_path: str) -> str:
     """
     Takes file path to blob and converts blob to base64 encoded string
     """
@@ -61,7 +61,8 @@ def make_url(endpoint: str, blob_type: str, parameters: dict) -> str:
     if not blob_type in parameters.keys():
         parameters["blob_type"] = blob_type
     url = endpoint + "?"
-    for key in parameters:
-        url += f"{key}={parameters[key]}&"
-    url = url[0:-1]
+    url += "&".join(parameters)
+    # for key in parameters:
+    #     url += f"{key}={parameters[key]}&"
+    # url = url[0:-1]
     return url
