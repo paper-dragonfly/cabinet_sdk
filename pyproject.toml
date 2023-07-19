@@ -2,21 +2,28 @@
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-[project]
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "^2.31.0"
+pyyaml = "^6.0.1"
+google-cloud-storage = "^2.10.0"
+
+[tool.poetry]
 name = "cabinet_sdk"
 version = "0.1.2"
-authors = [
-  { name="Kathleen Noble", email="kitkat_kathleen@yahoo.com" },
-]
 description = "Client for Cabinet, a flexible blob storage system"
+
+authors = [
+  "Kathleen Noble <kitkat_kathleen@yahoo.com>"
+]
+
 readme = "README.md"
-requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = ["requests", "PyYAML", "google-cloud-storage"]
+
 
 [project.urls]
 "Homepage" = "https://github.com/paper-dragonfly/cabinet_sdk"
