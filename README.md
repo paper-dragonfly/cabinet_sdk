@@ -43,6 +43,13 @@ Creating, editing or deleting blob_types and their associated metadata schema mu
 ## Configuration and setup
 In order for cabinet-sdk to communicate with the cabinet-api you must provide the client with the API url. Add config/config.yaml to your root directory. If it already exists, simply add the cabinet specific code to the config.yaml file. In this file list your environments as keys and the root url on which the API is running as values. 
 
+## Installation for Developers
+This project uses [Poetry](https://python-poetry.org/) for dependency management.
+
+To get started,
+1. `poetry shell`
+2. `poetry install`
+
 #### Sample contents of config.yaml 
 ---
 cabinet:
